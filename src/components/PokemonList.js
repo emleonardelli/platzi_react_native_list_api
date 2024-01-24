@@ -37,10 +37,10 @@ export default PokemonList
 const styles = StyleSheet.create({
     flatListContentContainer: {
         paddingHorizontal:5,
-        marginTop: Platform.OS === 'android' ? 5 : 0,
+        marginTop: Platform.OS === 'android' ? 55 : 0,
     },
     spinner: {
       marginTop: 20,
-      marginBottom: Platform.OS === 'android' ? 60 : 60,
+      marginBottom: Platform.OS === 'android' ? 100 : 60,
     }
 });
