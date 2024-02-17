@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, SafeAreaView, Image, Platform } from 'react-native'
-import React from 'react'
+import { View, Text, StyleSheet, SafeAreaView, Image, Platform, TouchableWithoutFeedback } from 'react-native'
+import React, { useState } from 'react'
 import { capitalize } from 'lodash';
 import { getColorByPokemonType } from '../../utils/getColorByPokemonType';
 
 const Header = (props) => {
-  
+  const [size, setSize] = useState('small');
   const {
     name,
     order,
@@ -14,7 +14,11 @@ const Header = (props) => {
 
   const color = getColorByPokemonType(type);
 
-  const bgStyle = [{ backgroundColor: color, ...styles.bgStyle }]
+  const bgStyle = [{
+    backgroundColor: color,
+    ...styles.bgStyle,
+    height: getSize(size).height
+    }]
 
   return (
     <>
@@ -25,10 +29,17 @@ const Header = (props) => {
                 <Text style={styles.order}>#{`${order}`.padStart(3,0)}</Text>
             </View>
             <View style={styles.contentImg}>
-                <Image
-                    source={{uri: image}}
-                    style={styles.image}
-                />
+                <TouchableWithoutFeedback
+                    onPress={() => toogleSize(size, setSize)}
+                >
+                    <Image
+                        source={{uri: image}}
+                        style={{
+                            ...styles.image,
+                            ...getSize(size)
+                        }}
+                    />
+                </TouchableWithoutFeedback>
             </View>
         </SafeAreaView>
     </>
@@ -36,6 +47,36 @@ const Header = (props) => {
 }
 
 export default Header
+
+const toogleSize = (size, setSize) => {
+    switch (size) {
+        case 'small': setSize('medium');break;
+        case 'medium': setSize('large');break;
+        case 'large': setSize('small');break;
+    }
+}
+
+const getSize = (size) => {
+    const values={
+        width: 250,
+        height: 400,
+    };
+    switch (size) {
+        case 'small':
+            values.width= 250;
+            values.height= 400;
+        break;
+        case 'medium':
+            values.width= 350;
+            values.height= 500;
+        break;
+        case 'large':
+            values.width= 450;
+            values.height= 600;
+        break;
+   }
+   return values;
+}
 
 const styles = StyleSheet.create({
     bgStyle: {
@@ -72,7 +113,7 @@ const styles = StyleSheet.create({
         top: 30,
     },
     image: {
-        width: 250,
+        width: getSize().width,
         height: 400,
         marginTop: Platform.OS === "android" ? -100 : 0 ,
         resizeMode: "contain"
